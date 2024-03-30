@@ -20,7 +20,6 @@ public class MidiDeviceHandler {
     }
 
     public void connect() {
-       // Toast.makeText(context, "Try to connect", Toast.LENGTH_SHORT).show();
         if (midiManager == null) {
             Toast.makeText(context, "MIDI not supported on this device", Toast.LENGTH_SHORT).show();
             return;
@@ -29,7 +28,6 @@ public class MidiDeviceHandler {
         MidiManager.OnDeviceOpenedListener deviceOpenedListener = new MidiManager.OnDeviceOpenedListener() {
             @Override
             public void onDeviceOpened(MidiDevice device) {
-                Toast.makeText(context, "onDeviceOpened", Toast.LENGTH_SHORT).show();
                 if (device != null) {
                     Toast.makeText(context, "MIDI device connected", Toast.LENGTH_SHORT).show();
                     // Here you can perform any additional actions when the MIDI device is connected
@@ -40,25 +38,29 @@ public class MidiDeviceHandler {
         };
 
         // Get the list of MIDI devices
-        MidiDeviceInfo[] infos = new MidiDeviceInfo[0];
+        MidiDeviceInfo[] infos = midiManager.getDevices();
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-            Toast.makeText(context, "MIDI device is on USB", Toast.LENGTH_SHORT).show();
-            infos = midiManager.getDevicesForTransport(MidiManager.TRANSPORT_MIDI_BYTE_STREAM).toArray(new MidiDeviceInfo[0]);
-
-        }
-        for (MidiDeviceInfo info : infos) {
-            Toast.makeText(context, "MIDI device is on USB", Toast.LENGTH_SHORT).show();
-            // Check if the device is an input device
-            if (info.getType() == MidiDeviceInfo.TYPE_USB) {
-                // Try to open the device
-                midiManager.openDevice(info, deviceOpenedListener, new Handler(Looper.getMainLooper()));
-
-                // Only open one device for simplicity
-                break;
+        // Check if the SDK version supports the USB transport type
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            Toast.makeText(context, "SDK is OK", Toast.LENGTH_SHORT).show();
+            // For Android 6.0 (Marshmallow) and above, use USB transport type
+            for (MidiDeviceInfo info : infos) {
+                Toast.makeText(context, "there is some device", Toast.LENGTH_SHORT).show();
+                // Check if the device is an input device and supports USB transport
+                if (info.getType() == MidiDeviceInfo.TYPE_USB) {
+                    // Try to open the device
+                    midiManager.openDevice(info, deviceOpenedListener, new Handler(Looper.getMainLooper()));
+                    // Only open one device for simplicity
+                    break;
+                }
             }
+        } else {
+            // For older Android versions, use a fallback mechanism
+            // You can implement alternative logic here for older versions
+            Toast.makeText(context, "MIDI device recognition is not supported on this device", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     public void disconnect() {
         // Add your MIDI device disconnection logic here
