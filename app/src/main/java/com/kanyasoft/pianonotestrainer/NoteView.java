@@ -3,6 +3,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.AttributeSet;
 import android.view.View;
 
 public class NoteView extends View {
@@ -10,7 +11,17 @@ public class NoteView extends View {
 
     public NoteView(Context context) {
         super(context);
-        currentNote = NoteGenerator.generateRandomNote();
+        currentNote = "";
+    }
+
+    public NoteView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        currentNote = "";
+    }
+
+    public NoteView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        currentNote = "";
     }
 
     @Override
@@ -21,10 +32,10 @@ public class NoteView extends View {
         int height = getHeight();
 
         Paint paint = new Paint();
-        paint.setColor(Color.BLACK);
         paint.setTextSize(100);
         paint.setTextAlign(Paint.Align.CENTER);
 
+        paint.setColor(Color.BLACK);
         canvas.drawText(currentNote, width / 2f, height / 2f, paint);
     }
 

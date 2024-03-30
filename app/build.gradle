@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.kanyasoft.pianonotestrainer"
-        minSdk 24
+        minSdk 23
         targetSdk 34
         versionCode 1
         versionName "1.0"
@@ -26,11 +26,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    // Add this block
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
+
 }
 
 dependencies {
@@ -42,4 +38,6 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
+    implementation libs.appcompat.v130
+
 }
